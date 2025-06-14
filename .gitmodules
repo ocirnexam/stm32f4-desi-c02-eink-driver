@@ -1,0 +1,3 @@
+[submodule "src/stm32f4_mcal"]
+	path = src/stm32f4_mcal
+	url = git@github.com:ocirnexam/stm32f4_mcal.git
