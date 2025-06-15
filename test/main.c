@@ -1,7 +1,7 @@
 #include "stm32f4xx.h"
-#include "gpio.h"
-#include "systemclock_config.h"
-#include "helpers.h"
+#include "physical/gpio/gpio.h"
+#include "physical/sysclock/systemclock_config.h"
+#include "functional/helpers/helpers.h"
 
 void SystemInit(void)
 {
