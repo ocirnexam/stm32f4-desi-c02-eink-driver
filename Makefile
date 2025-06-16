@@ -30,6 +30,7 @@ BUILD_DIR = build
 C_SOURCES =  \
 src/stm32f4_mcal/src/functional/helpers/helpers.c \
 src/stm32f4_mcal/src/physical/gpio/gpio.c \
+src/stm32f4_mcal/src/physical/dma/dma.c \
 src/stm32f4_mcal/src/physical/spi/spi.c \
 src/stm32f4_mcal/src/physical/sysclock/systemclock_config.c \
 test/main.c 

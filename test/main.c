@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include "physical/gpio/gpio.h"
 #include "physical/sysclock/systemclock_config.h"
+#include "physical/dma/dma.h"
 #include "functional/helpers/helpers.h"
 
 void SystemInit(void)
@@ -18,14 +19,28 @@ int main(void)
         return COUNTDOWN_EXCEEDED_ERROR;
     }
 
+    DMA_Unit dma_c = {
+        .channel = DMA_CHANNEL_1, 
+        .dma_unit = DMA_UNIT_1, 
+        .transfer_direction = DMA_M2P
+    };
+    if(DMA_Configure(&dma_c) != DMA_CONFIG_SUCCESS) {
+        return -1;
+    }
+
     // blinky code
-    IOPin led = {GPIOA, PIN5, GPIO_GENERAL_OUTPUT, GPIO_ALTF_SYSTEM};
-    GPIO_Config(led);
+    IOPin led = {
+        .port = GPIOA, 
+        .pin = PIN5, 
+        .io_type = GPIO_GENERAL_OUTPUT, 
+        .alt_function = GPIO_ALTF_SYSTEM
+    };
+    GPIO_Config(&led);
     while (1)
     {
-        GPIO_WritePin(led, PIN_HIGH);
+        GPIO_WritePin(&led, PIN_HIGH);
         msleep(500);
-        GPIO_WritePin(led, PIN_LOW);
+        GPIO_WritePin(&led, PIN_LOW);
         msleep(500);
     }
     return 0;
