@@ -21,8 +21,16 @@ int main(void)
 
     DMA_Unit dma_c = {
         .channel = DMA_CHANNEL_1, 
-        .dma_unit = DMA_UNIT_1, 
-        .transfer_direction = DMA_M2P
+        .stream = DMA1_Stream0,
+        .unit = DMA1, 
+        .transfer_direction = DMA_M2P,
+        .transfer_mode = DMA_DIRECT_MODE,
+        .memory_increment_mode = DMA_INCREMENT_MODE_FALSE,
+        .peripheral_increment_mode = DMA_INCREMENT_MODE_FALSE,
+        .memory_size = DMA_HALF_WORD,
+        .peripheral_size = DMA_HALF_WORD,
+        .memory_address = (uint32_t) 0x20000000,
+        .peripheral_address = (GPIOA->ODR),
     };
     if(DMA_Configure(&dma_c) != DMA_CONFIG_SUCCESS) {
         return -1;
