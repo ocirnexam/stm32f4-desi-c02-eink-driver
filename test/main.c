@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "stm32f4xx.h"
 #include "physical/gpio/gpio.h"
 #include "physical/sysclock/systemclock_config.h"
@@ -19,24 +21,24 @@ int main(void)
         return COUNTDOWN_EXCEEDED_ERROR;
     }
 
-    DMA_Unit dma_c = {
-        .channel = DMA_CHANNEL_1, 
-        .stream = DMA1_Stream0,
-        .unit = DMA1, 
-        .transfer_direction = DMA_M2P,
-        .transfer_mode = DMA_DIRECT_MODE,
-        .memory_increment_mode = DMA_INCREMENT_MODE_FALSE,
-        .peripheral_increment_mode = DMA_INCREMENT_MODE_FALSE,
-        .memory_size = DMA_HALF_WORD,
-        .peripheral_size = DMA_HALF_WORD,
-        .memory_address = (uint32_t) 0x20000000,
-        .peripheral_address = (GPIOA->ODR),
-    };
-    if(DMA_Configure(&dma_c) != DMA_CONFIG_SUCCESS) {
+    volatile uint8_t* start = (uint8_t*) malloc(sizeof(uint8_t));
+    volatile uint8_t* dest = (uint8_t*)malloc(sizeof(uint8_t));
+
+    *start = 1;
+    *dest = 0;
+
+    DMA_Unit dma = {.unit = DMA2, .stream = DMA2_Stream0};
+    (void) DMA_SetTransferMode(&dma, DMA_FIFO_MODE);
+    (void) DMA_SetPeripheralSize(&dma, DMA_BYTE);
+    (void) DMA_SetPeripheralAddress(&dma, (uint32_t) start);
+    (void) DMA_SetMemorySize(&dma, DMA_BYTE);
+    (void) DMA_SetMemoryAddress(&dma, (uint32_t) dest);
+    (void) DMA_SetNrOfItemsToTransfer(&dma, 1);
+
+    if(DMA_Configure(&dma) != DMA_SUCCESS) {
         return -1;
     }
 
-    // blinky code
     IOPin led = {
         .port = GPIOA, 
         .pin = PIN5, 
@@ -44,12 +46,13 @@ int main(void)
         .alt_function = GPIO_ALTF_SYSTEM
     };
     GPIO_Config(&led);
-    while (1)
+    DMA_StreamEnable(&dma);
+    for (int i = 0; i < 100000000; i++)
     {
-        GPIO_WritePin(&led, PIN_HIGH);
-        msleep(500);
-        GPIO_WritePin(&led, PIN_LOW);
+        GPIO_WritePin(&led, *dest);
         msleep(500);
     }
+    free(start);
+    free(dest);
     return 0;
 }
