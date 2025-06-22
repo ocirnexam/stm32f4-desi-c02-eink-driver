@@ -28,6 +28,7 @@ int main(void)
     *dest = 0;
 
     DMA_Unit dma = {.unit = DMA2, .stream = DMA2_Stream0};
+    (void) DMA_SetTransferDirection(&dma, DMA_M2M);
     (void) DMA_SetTransferMode(&dma, DMA_FIFO_MODE);
     (void) DMA_SetPeripheralSize(&dma, DMA_BYTE);
     (void) DMA_SetPeripheralAddress(&dma, (uint32_t) start);
