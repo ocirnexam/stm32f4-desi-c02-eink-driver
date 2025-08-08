@@ -1,4 +1,4 @@
-name: desi-c02-eink-driver
+name: greplog
 
 on:
   push:
@@ -10,14 +10,19 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  steps:
-  - uses: carlosperate/arm-none-eabi-gcc-action@v1
+  build:
+    runs-on: ubuntu-latest
 
-  - name: Test arm-none-eabi-version
-  - run: arm-none-eabi-gcc --version
+    steps:
+    - uses: carlosperate/arm-none-eabi-gcc-action@v1
+      with:
+        submodules: recursive
 
-  - name: Build
-    run: make
+    - name: Test GCC
+      run: arm-none-eabi-gcc --version
 
-  - name: Generate Hexfile
-    run: make hex
+    - name: Build
+      run: make
+
+    - name: Generate Hex File
+      run: make hex
