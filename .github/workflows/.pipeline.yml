@@ -21,10 +21,6 @@ jobs:
     - name: Test GCC
       run: arm-none-eabi-gcc --version
 
-    - name: Build libopencm3
-      working-directory: src/libopencm3
-      run: make
-
     - name: Build Test
       working-directory: ./
       run: make
