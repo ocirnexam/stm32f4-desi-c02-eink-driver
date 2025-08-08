@@ -26,8 +26,7 @@ jobs:
       
     - name: Build libopencm3
       working-directory: ${{github.workspace}}/src/libopencm3
-      run: make
+      run: make TARGETS='stm32/f4'
 
     - name: Build Test
-      working-directory: ./
       run: make
