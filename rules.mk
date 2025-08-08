@@ -118,7 +118,7 @@ TGT_CPPFLAGS	+= $(DEFS)
 TGT_LDFLAGS		+= --static -nostartfiles
 TGT_LDFLAGS		+= -T$(LDSCRIPT)
 TGT_LDFLAGS		+= $(ARCH_FLAGS) $(DEBUG)
-TGT_LDFLAGS		+= -Wl,-Map=$(*).map -Wl,--cref
+TGT_LDFLAGS		+= -Wl,-Map=$(BUILD_DIR)/$(*).map -Wl,--cref
 TGT_LDFLAGS		+= -Wl,--gc-sections
 ifeq ($(V),99)
 TGT_LDFLAGS		+= -Wl,--print-gc-sections
@@ -144,7 +144,7 @@ bin: $(BINARY).bin
 hex: $(BINARY).hex
 srec: $(BINARY).srec
 list: $(BINARY).list
-GENERATED_BINARIES=$(BUILD_DIR)/$(BINARY).elf $(BUILD_DIR)/$(BINARY).bin $(BUILD_DIR)/$(BINARY).hex $(BUILD_DIR)/$(BINARY).srec $(BUILD_DIR)/$(BINARY).list $(BINARY).map
+GENERATED_BINARIES=$(BUILD_DIR)/$(BINARY).elf $(BUILD_DIR)/$(BINARY).bin $(BUILD_DIR)/$(BINARY).hex $(BUILD_DIR)/$(BINARY).srec $(BUILD_DIR)/$(BINARY).list $(BUILD_DIR)/$(BINARY).map
 
 images: $(BINARY).images
 flash: $(BINARY).flash
