@@ -22,9 +22,9 @@ jobs:
       run: arm-none-eabi-gcc --version
 
     - name: Build libopencm3
-      working-directory: ${{github.workspace}}/src/libopencm3
+      working-directory: src/libopencm3
       run: make
 
     - name: Build Test
-      working-directory: ${{github.workspace}}
+      working-directory: ./
       run: make
