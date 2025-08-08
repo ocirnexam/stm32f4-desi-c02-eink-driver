@@ -17,6 +17,9 @@ jobs:
     - uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
         submodules: recursive
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - name: Test GCC
       run: arm-none-eabi-gcc --version
