@@ -22,7 +22,9 @@ jobs:
       run: arm-none-eabi-gcc --version
 
     - name: Build
+      working-directory: ${{github.workspace}}
       run: make
 
     - name: Generate Hex File
+      working-directory: ${{github.workspace}}
       run: make hex
