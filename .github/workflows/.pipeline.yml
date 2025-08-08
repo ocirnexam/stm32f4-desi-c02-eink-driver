@@ -1,0 +1,23 @@
+name: desi-c02-eink-driver
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  steps:
+  - uses: carlosperate/arm-none-eabi-gcc-action@v1
+
+  - name: Test arm-none-eabi-version
+  - run: arm-none-eabi-gcc --version
+
+  - name: Build
+    run: make
+
+  - name: Generate Hexfile
+    run: make hex
