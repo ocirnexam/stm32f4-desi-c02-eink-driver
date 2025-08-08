@@ -21,10 +21,10 @@ jobs:
     - name: Test GCC
       run: arm-none-eabi-gcc --version
 
-    - name: Build
-      working-directory: ${{github.workspace}}
+    - name: Build libopencm3
+      working-directory: ${{github.workspace}}/src/libopencm3
       run: make
 
-    - name: Generate Hex File
+    - name: Build Test
       working-directory: ${{github.workspace}}
-      run: make hex
+      run: make
