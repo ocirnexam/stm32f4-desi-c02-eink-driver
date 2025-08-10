@@ -3,7 +3,7 @@
 #include <libopencm3/stm32/spi.h>
 
 void clockSetup() {
-	rcc_clock_setup_pll(&rcc_hsi_configs[RCC_CLOCK_3V3_180MHZ]);
+	rcc_clock_setup_pll(&rcc_hsi_configs[RCC_CLOCK_3V3_84MHZ]);
   
 	rcc_periph_clock_enable(RCC_SPI1);
 	rcc_periph_clock_enable(RCC_GPIOA);
@@ -27,7 +27,7 @@ int main(void)
                   GPIO_MODE_AF,
                   GPIO_PUPD_NONE, 
                   GPIO5 | GPIO7 );
-	gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO6);
+	gpio_set_af(GPIOA, GPIO_AF5, GPIO5 | GPIO7);
 
 	/* Chip select line */
 	gpio_set(GPIOB, GPIO6);
@@ -39,8 +39,12 @@ int main(void)
   spi_enable(SPI1);
   while (1) {
     gpio_clear(GPIOB, GPIO6); /* CS* select */
-    spi_write(SPI1, 0x55);
+    spi_send(SPI1, 0x55);
+    (void) spi_read(SPI1); // wait for transaction finished!
     gpio_set(GPIOB, GPIO6); /* CS* deselect */
+    for(int i = 0; i < 1000000; i++) {
+      asm("nop");
+    }
   }
   return 0;
 }
