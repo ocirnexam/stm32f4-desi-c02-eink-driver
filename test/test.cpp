@@ -18,7 +18,7 @@ int main(void)
   while (1) {
     driver.SendCMD(cmd);
     cmd++;
-    cmd %= 20;
+    cmd %= 0x20;
     for(int i = 0; i < 1000000; i++) {
       asm("nop");
     }
