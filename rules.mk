@@ -44,13 +44,14 @@ STYLECHECKFLAGS	:= --no-tree -f --terse --mailback
 STYLECHECKFILES	:= $(shell find . -name '*.[ch]')
 OPT		:= -Os
 DEBUG		:= -ggdb3
-CSTD		?= -std=c99
+CSTD		?= -std=c23
 
 
 ###############################################################################
 # Source files
 
 OBJS		+= test/$(BINARY).o
+OBJS		+= src/eink/goodisplay_eink_driver.o
 OBJS		+= src/startup_stm32f446ret.o 
 
 
