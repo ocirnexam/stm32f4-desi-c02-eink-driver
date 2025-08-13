@@ -14,12 +14,9 @@ int main(void)
   GOODISPLAY_EINK_Driver driver = GOODISPLAY_EINK_Driver();
   driver.Init();
 
-  uint8_t cmd = 0x00;
   while (1) {
-    driver.SendCMD(cmd);
-    cmd++;
-    cmd %= 0x20;
-    for(int i = 0; i < 1000000; i++) {
+    driver.ClearScreenWhite();
+    for(int i = 0; i < 10000000; i++) {
       asm("nop");
     }
   }

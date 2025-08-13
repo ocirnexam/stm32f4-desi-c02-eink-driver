@@ -15,21 +15,37 @@ struct IOPin {
 
 class GOODISPLAY_EINK_Driver {
 private:
+    // spi
     uint32_t spiInstance;
     IOPin cs;
     IOPin mosi;
     IOPin miso;
     IOPin clock;
 
+    // driver pins
+    IOPin busy_pin;
+    IOPin dc_pin;
+    IOPin reset_pin;
+
+    void InitGPIOS(void);
+    void InitSPI(void);
+    void HW_InitDisplay(void); 
+    void SendSingleDataByte(uint8_t data);
+    void SendCMD(uint8_t command);
+    void SendData(uint8_t data[]);
+    void DeepSleep(void);
+    void Update(void);
+    bool IsBusy(void);
+
 public:
     explicit GOODISPLAY_EINK_Driver();
     ~GOODISPLAY_EINK_Driver() {}
 
     void Init();
-    void SendCMD(uint8_t command);
-    void SendData(uint8_t data[]);
-    void Clear();
-    void Update();
+
+    void WriteScreen(const unsigned char *datas);
+    void ClearScreenWhite(void);
+    void ClearScreenBlack(void);
 };
 
 #endif
