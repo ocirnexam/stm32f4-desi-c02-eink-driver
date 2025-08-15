@@ -1,24 +1,18 @@
 #include "goodisplay_eink_driver.hpp"
-#include <array>
+#include "systick/systick.hpp"
 
 #define EPD_WIDTH   176U
 #define EPD_HEIGHT  264U
 #define EPD_ARRAY_SIZE  (EPD_WIDTH * EPD_HEIGHT)
-
-inline void delay(uint32_t ticks) {
-    for(volatile long unsigned int i = 0; i < (ticks * rcc_ahb_frequency) / 1000; i++) {
-        asm("nop");
-    }
-}
 
 GOODISPLAY_EINK_Driver::GOODISPLAY_EINK_Driver(): spiInstance(SPI1), 
                                                   cs(IOPin(GPIOB, GPIO6)), 
                                                   mosi(IOPin(GPIOA, GPIO6)),
                                                   miso(IOPin(GPIOA, GPIO7)), 
                                                   clock(IOPin(GPIOA, GPIO5)),
-                                                  busy_pin(IOPin(GPIOC, GPIO13)),
-                                                  dc_pin(IOPin(GPIOC, GPIO14)),
-                                                  reset_pin(IOPin(GPIOC, GPIO15)) { 
+                                                  busy_pin(IOPin(GPIOA, GPIO0)),
+                                                  dc_pin(IOPin(GPIOA, GPIO1)),
+                                                  reset_pin(IOPin(GPIOA, GPIO4)) { 
 }
 
 void GOODISPLAY_EINK_Driver::InitSPI() {
@@ -64,7 +58,6 @@ void GOODISPLAY_EINK_Driver::InitSPI() {
 }
 
 void GOODISPLAY_EINK_Driver::InitGPIOS() {
-	rcc_periph_clock_enable(RCC_GPIOC);
 
     // setup io pins for busy, reset and dc bit
     gpio_mode_setup(busy_pin.port,
@@ -74,25 +67,25 @@ void GOODISPLAY_EINK_Driver::InitGPIOS() {
     );
     gpio_mode_setup(reset_pin.port,
                     GPIO_MODE_OUTPUT,
-                    GPIO_PUPD_PULLDOWN,
+                    GPIO_PUPD_NONE,
                     reset_pin.pin
     );
     gpio_mode_setup(dc_pin.port,
                     GPIO_MODE_OUTPUT,
-                    GPIO_PUPD_PULLDOWN,
+                    GPIO_PUPD_NONE,
                     dc_pin.pin
     );
 }
 
 bool GOODISPLAY_EINK_Driver::IsBusy() {
-    return (bool) false;
+    return (bool) gpio_get(busy_pin.port, busy_pin.pin);
 }
 
 void GOODISPLAY_EINK_Driver::HW_InitDisplay() {
     gpio_clear(reset_pin.port, reset_pin.pin);  // Module reset   
-    // delay(10);//At least 10ms delay 
+    delay(10);//At least 10ms delay 
     gpio_set(reset_pin.port, reset_pin.pin);  // Module reset   
-    // delay(10); //At least 10ms delay 
+    delay(10); //At least 10ms delay 
     
     while(IsBusy());   
     SendCMD(0x12);  //SWRESET
@@ -121,7 +114,7 @@ void GOODISPLAY_EINK_Driver::SendSingleDataByte(uint8_t data) {
     gpio_set(cs.port, cs.pin); /* CS* deselect */
 }
 
-void GOODISPLAY_EINK_Driver::SendData(uint8_t data[]) {
+void GOODISPLAY_EINK_Driver::SendData(uint8_t data[EPD_ARRAY_SIZE]) {
     for (volatile uint32_t i = 0; i < EPD_ARRAY_SIZE; i++) {
         SendSingleDataByte(data[i]);
     }
@@ -136,11 +129,11 @@ void GOODISPLAY_EINK_Driver::Update() {
 
 void GOODISPLAY_EINK_Driver::ClearScreenWhite()
 {
-    unsigned int i;
-    SendCMD(0x24);
+    volatile unsigned int i;
+    SendCMD(0x24U);
     for(i = 0; i < EPD_ARRAY_SIZE; i++)
     {
-        SendSingleDataByte(0xff);
+        SendSingleDataByte(0xffU);
     }
     Update();
     DeepSleep();

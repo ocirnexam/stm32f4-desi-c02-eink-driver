@@ -52,7 +52,7 @@ CSTD		?= -std=c23
 
 OBJS		+= test/$(BINARY).o
 OBJS		+= src/eink/goodisplay_eink_driver.o
-OBJS		+= src/startup_stm32f446ret.o 
+OBJS		+= src/systick/systick.o
 
 
 ifeq ($(strip $(OPENCM3_DIR)),)
