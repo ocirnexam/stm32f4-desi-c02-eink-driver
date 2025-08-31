@@ -81,8 +81,8 @@ all contain the correct values for the target you wish to use.
 You cannot provide both!
 endef
 
-DEFS		+= -I$(OPENCM3_DIR)/include
-LDFLAGS		+= -L$(OPENCM3_DIR)/lib
+DEFS		+= -I$(OPENCM3_DIR)include
+LDFLAGS		+= -L$(OPENCM3_DIR)lib
 LDLIBS		+= -l$(LIBNAME)
 LDSCRIPT	?= $(BINARY).ld
 

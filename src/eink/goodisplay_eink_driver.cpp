@@ -16,10 +16,10 @@ GOODISPLAY_EINK_Driver::GOODISPLAY_EINK_Driver(): spiInstance(SPI1),
 }
 
 void GOODISPLAY_EINK_Driver::InitSPI() {
-	rcc_periph_clock_enable(RCC_SPI1);
+    rcc_periph_clock_enable(RCC_SPI1);
     rcc_periph_reset_pulse(RST_SPI1);
-	rcc_periph_clock_enable(RCC_GPIOA);
-	rcc_periph_clock_enable(RCC_GPIOB);
+    rcc_periph_clock_enable(RCC_GPIOA);
+    rcc_periph_clock_enable(RCC_GPIOB);
 
     // setup io pins for spi
     gpio_mode_setup(mosi.port, 
@@ -53,7 +53,7 @@ void GOODISPLAY_EINK_Driver::InitSPI() {
                   SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
                   SPI_CR1_CPHA_CLK_TRANSITION_1, 
                   SPI_CR1_DFF_8BIT, 
-                  SPI_CR1_LSBFIRST);
+		          SPI_CR1_MSBFIRST);
     spi_enable(spiInstance);
 }
 
