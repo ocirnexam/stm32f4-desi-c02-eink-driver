@@ -1,4 +1,4 @@
-# STM32F4 DESI-C02 EINK Display Driver
+# STM32F4 DESPI-C02 EINK Display Driver
 
-This repo contains an eink driver for the desi-c02 connector using goodisplay eink displays.
-For this, the stm32 LL library is used.
+This repo contains an eink driver for the despi-c02 connector using goodisplay eink displays.
+For this, the libopencm3 library is used
