@@ -19,7 +19,9 @@ int main(void)
 
   while (1) {
     driver.ClearScreenWhite();
-    delay(5000);
+    delay(1000);
+    driver.ClearScreenBlack();
+    delay(1000);
   }
   return 0;
 }

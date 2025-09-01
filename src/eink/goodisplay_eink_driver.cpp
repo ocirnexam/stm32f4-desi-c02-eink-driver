@@ -49,7 +49,7 @@ void GOODISPLAY_EINK_Driver::InitSPI() {
 
     // setup spi
     spi_init_master(spiInstance, 
-                  SPI_CR1_BAUDRATE_FPCLK_DIV_4, 
+                  SPI_CR1_BAUDRATE_FPCLK_DIV_8, 
                   SPI_CR1_CPOL_CLK_TO_0_WHEN_IDLE,
                   SPI_CR1_CPHA_CLK_TRANSITION_1, 
                   SPI_CR1_DFF_8BIT, 
@@ -78,7 +78,7 @@ void GOODISPLAY_EINK_Driver::InitGPIOS() {
 }
 
 bool GOODISPLAY_EINK_Driver::IsBusy() {
-    return (bool) gpio_get(busy_pin.port, busy_pin.pin);
+    return ((bool) gpio_get(busy_pin.port, busy_pin.pin));
 }
 
 void GOODISPLAY_EINK_Driver::HW_InitDisplay() {
@@ -95,7 +95,6 @@ void GOODISPLAY_EINK_Driver::HW_InitDisplay() {
 void GOODISPLAY_EINK_Driver::Init() {
     InitSPI();
     InitGPIOS();
-    HW_InitDisplay();
 }
 
 void GOODISPLAY_EINK_Driver::SendCMD(uint8_t command) {
@@ -129,11 +128,25 @@ void GOODISPLAY_EINK_Driver::Update() {
 
 void GOODISPLAY_EINK_Driver::ClearScreenWhite()
 {
+    HW_InitDisplay();
     volatile unsigned int i;
     SendCMD(0x24U);
     for(i = 0; i < EPD_ARRAY_SIZE; i++)
     {
         SendSingleDataByte(0xffU);
+    }
+    Update();
+    DeepSleep();
+}
+
+void GOODISPLAY_EINK_Driver::ClearScreenBlack()
+{
+    HW_InitDisplay();
+    volatile unsigned int i;
+    SendCMD(0x24U);
+    for(i = 0; i < EPD_ARRAY_SIZE; i++)
+    {
+        SendSingleDataByte(0x00U);
     }
     Update();
     DeepSleep();
